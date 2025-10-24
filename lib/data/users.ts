@@ -8,4 +8,12 @@ export type User = {
   tier?: number;
 };
 
-export const users: User[] = [];
+export const users: User[] = [
+  {
+    id: "1",
+    email: "gio@example.com",
+    password: "password123",
+    role: "user",
+    tier: 1,
+  },
+];
