@@ -1,13 +1,12 @@
 "use client";
 
 import { z } from "zod";
-import { LoginSchema } from "@/lib/schemas/authSchema";
+import { signupSchema } from "@/lib/schemas/authSchema";
 import {
   TextField,
   Button,
   Card,
   Typography,
-  Container,
   Box,
   CardHeader,
   CardContent,
@@ -17,12 +16,9 @@ import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import { useUserStore } from "@/lib/store/userStore";
 
-type LoginFormData = z.infer<typeof LoginSchema>;
+type SignUpFormData = z.infer<typeof signupSchema>;
 
-export default function LogInPage() {
-  const router = useRouter();
-  const setUser = useUserStore((state) => state.setUser);
-
+export default function SignUpPage() {
   const {
     register,
     handleSubmit,
@@ -30,12 +26,14 @@ export default function LogInPage() {
     setError,
     formState: { errors },
   } = useForm({
-    resolver: zodResolver(LoginSchema),
+    resolver: zodResolver(signupSchema),
   });
 
-  const onSubmit = async (data: LoginFormData) => {
+  const router = useRouter();
+  const setUser = useUserStore((state) => state.setUser);
+  const onSubmit = async (data: SignUpFormData) => {
     clearErrors();
-    const res = await fetch("/api/auth/login", {
+    const res = await fetch("/api/users/new", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -43,11 +41,10 @@ export default function LogInPage() {
       body: JSON.stringify(data),
     });
     const result = await res.json();
-
     if (!res.ok) {
       if (result.errors) {
         result.errors.forEach(
-          (error: { field: keyof LoginFormData; message: string }) => {
+          (error: { field: keyof SignUpFormData; message: string }) => {
             setError(error.field, { message: error.message });
           }
         );
@@ -61,11 +58,11 @@ export default function LogInPage() {
   };
 
   return (
-    <Card sx={{ boxShadow: 1, borderRadius: 2, padding: 2 }}>
+    <Card sx={{ boxShadow: 3, borderRadius: 2, padding: 2 }}>
       <CardHeader
         title={
           <Typography fontWeight={"bold"} variant="h4">
-            Login
+            Sign Up
           </Typography>
         }
       />
@@ -95,20 +92,35 @@ export default function LogInPage() {
             error={!!errors.password}
             helperText={errors.password?.message}
           />
+          <TextField
+            label="Confirm Password"
+            type="password"
+            variant="outlined"
+            fullWidth
+            margin="normal"
+            {...register("confirmPassword")}
+            error={!!errors.confirmPassword}
+            helperText={errors.confirmPassword?.message}
+          />
+
           <Box
             component="footer"
             mt={2}
             display="flex"
             justifyContent="flex-end"
           >
-            <Button type="submit" variant="contained" color="primary">
+            <Button
+              variant="outlined"
+              color="primary"
+              onClick={() => router.push("/login")}
+            >
               Login
             </Button>
             <Button
               sx={{ ml: 1 }}
-              variant="outlined"
+              type="submit"
+              variant="contained"
               color="primary"
-              onClick={() => router.push("/signup")}
             >
               Sign Up
             </Button>
