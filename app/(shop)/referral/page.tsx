@@ -107,7 +107,7 @@ export default function Page() {
           <Typography variant="h6" component="h2">
             Referral Link:
           </Typography>
-          <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+          <Typography id="modal-modal-description" sx={{ mt: 2,  }}>
             {referralLink}
           </Typography>
           <Box>
