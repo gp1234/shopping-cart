@@ -1,6 +1,7 @@
 "use client";
 
 import { z } from "zod";
+import { useEffect } from "react";
 import { signupSchema } from "@/lib/schemas/authSchema";
 import {
   TextField,
@@ -15,22 +16,43 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import { useUserStore } from "@/lib/store/userStore";
+import { useSearchParams } from "next/navigation";
 
 type SignUpFormData = z.infer<typeof signupSchema>;
 
 export default function SignUpPage() {
+
+
+  const router = useRouter();
+  const token = useUserStore((s) => s.token);
+  const searchParams = useSearchParams();
+  const invitedBy = searchParams.get("referral");
+  const email = searchParams.get("email");
+
   const {
     register,
     handleSubmit,
     clearErrors,
     setError,
+    setValue,
     formState: { errors },
   } = useForm({
     resolver: zodResolver(signupSchema),
   });
 
-  const router = useRouter();
-  const setUser = useUserStore((state) => state.setUser);
+  useEffect(() => {
+    if (email) {
+      setValue("email", email);
+    }
+  }, [email, setValue]);
+
+ 
+
+    useEffect(() => {
+      if (token) router.push("/"); 
+    }, [token, router]);
+
+
   const onSubmit = async (data: SignUpFormData) => {
     clearErrors();
     const res = await fetch("/api/users/new", {
@@ -38,7 +60,7 @@ export default function SignUpPage() {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(data),
+      body: JSON.stringify(invitedBy ? { ...data, invitedBy } : data),
     });
     const result = await res.json();
     if (!res.ok) {
@@ -53,7 +75,7 @@ export default function SignUpPage() {
       }
       return;
     }
-    setUser(result.user);
+    useUserStore.getState().login(result.user, result.token);
     router.push("/");
   };
 

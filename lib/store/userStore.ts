@@ -1,23 +1,32 @@
-import { create } from "zustand";
+'use client'
+
+import { create } from 'zustand'
+import { persist } from 'zustand/middleware'
 
 type User = {
-  id: string;
-  email: string;
-  role: string;
-  tier: number;
-};
+  id: string
+  email: string
+  role: string
+  tier: string
+}
 
-type UserState = {
-  user: User | null;
-  setUser: (user: User) => void;
-  logout: () => Promise<void>;
-};
+type UserStore = {
+  user: User | null
+  token: string | null
+  login: (user: User, token: string) => void
+  logout: () => void
+}
 
-export const useUserStore = create<UserState>((set) => ({
-  user: null,
-  setUser: (user) => set({ user }),
-  logout: async () => {
-    await fetch("/api/auth/logout", { method: "POST" });
-    set({ user: null });
-  },
-}));
+export const useUserStore = create<UserStore>()(
+  persist(
+    (set) => ({
+      user: null,
+      token: null,
+      login: (user, token) => set({ user, token }),
+      logout: () => set({ user: null, token: null }),
+    }),
+    {
+      name: 'user-storage', 
+    }
+  )
+)

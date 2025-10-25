@@ -1,5 +1,5 @@
 "use client";
-
+import { useEffect } from "react";
 import { z } from "zod";
 import { LoginSchema } from "@/lib/schemas/authSchema";
 import {
@@ -21,8 +21,12 @@ type LoginFormData = z.infer<typeof LoginSchema>;
 
 export default function LogInPage() {
   const router = useRouter();
-  const setUser = useUserStore((state) => state.setUser);
+  const token = useUserStore((s) => s.token);
 
+  useEffect(() => {
+    if (token) router.push("/"); 
+  }, [token, router]);
+  
   const {
     register,
     handleSubmit,
@@ -56,8 +60,8 @@ export default function LogInPage() {
       }
       return;
     }
-    setUser(result.user);
-    router.push("/");
+      useUserStore.getState().login(result.user, result.token)
+      router.push('/')
   };
 
   return (

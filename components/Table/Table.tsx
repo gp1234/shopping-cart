@@ -12,6 +12,7 @@ type Props = {
 export default function VirtualizedProductTable({ products }: Props) {
   const parentRef = React.useRef<HTMLDivElement | null>(null)
 
+
 const items = useCartStore(state => state.items)
 const toggleCartItem = useCartStore(state => state.toggleCartItem)
 

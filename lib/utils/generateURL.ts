@@ -1,6 +1,6 @@
-export function generateURL(email: string, tier: number) {
+export function generateURL(id: string, email: string) {
     const baseUrl = 'http://localhost:3000'
-    const params = `email=${encodeURIComponent(email)}&tier=${encodeURIComponent(String(tier))}`;
-    return `${baseUrl}/?${params}`;
+    const params = `referral=${encodeURIComponent(id)}&email=${encodeURIComponent(email)}`;
+    return `${baseUrl}/signup/?${params}`;
     }
 

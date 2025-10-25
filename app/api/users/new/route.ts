@@ -20,6 +20,7 @@ export async function POST(request: Request) {
         { status: 400 }
       );
     }
+
     const { email, password, invitedBy } = result.data as {
       email: string;
       password: string;
@@ -35,10 +36,11 @@ export async function POST(request: Request) {
     }
 
     let tier = 1;
+    
     if (invitedBy) {
-      const inviter = users.find((user) => user.id === invitedBy);
-      if (inviter) {
-        tier = inviter.tier as number;
+      const invited = users.find((user) => user.id === invitedBy);
+      if (invited) {
+        tier = invited.tier as number;
       }
     }
 

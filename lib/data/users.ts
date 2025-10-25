@@ -14,6 +14,6 @@ export const users: User[] = [
     email: "gio@example.com",
     password: "password123",
     role: "user",
-    tier: 1,
+    tier: 3,
   },
 ];
