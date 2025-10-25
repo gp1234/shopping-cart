@@ -1,3 +1,5 @@
 # Shopping Cart!
 
-Just run npm run dev
+## Installation process
+1. Run `npm i` 
+2. Run `npm run dev`
