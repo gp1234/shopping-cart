@@ -1,6 +1,6 @@
-import NavBar from "@/components/NavBar/NavBar";
-import {Container} from "@mui/material";
-import ProtectedRoute from "@/components/ProtectedRoute/ProtectedRoute";
+import NavBar from "@/components/common/NavBar/NavBar";
+import { Container } from "@mui/material";
+import ProtectedRoute from "@/components/common/ProtectedRoute/ProtectedRoute";
 export default function ProductLayout({
   children,
 }: {
@@ -9,7 +9,9 @@ export default function ProductLayout({
   return (
     <ProtectedRoute>
       <NavBar />
-      <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>{children}</Container>
+      <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
+        {children}
+      </Container>
     </ProtectedRoute>
   );
 }

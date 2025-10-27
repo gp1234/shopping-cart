@@ -3,7 +3,7 @@ import { decodeMockJWT } from "@/lib/utils/generateMockJWT";
 import { dataStore } from "@/lib//utils/dataStore";
 import { randomUUID } from "crypto";
 import { ProductSchema } from "@/lib/schemas/productSchema";
-
+import { z } from "zod";
 function validateToken(req: Request) {
   const authHeader = req.headers.get("Authorization");
   const token = authHeader?.split(" ")[1];
@@ -34,10 +34,8 @@ export async function POST(req: Request) {
   const body = await req.json();
   const validation = ProductSchema.safeParse(body);
   if (!validation.success) {
-    return NextResponse.json(
-      { error: validation.error.format() },
-      { status: 400 }
-    );
+    const formatted = validation.error.flatten();
+    return NextResponse.json({ error: formatted }, { status: 400 });
   }
 
   const newProduct = { id: randomUUID(), ...body };

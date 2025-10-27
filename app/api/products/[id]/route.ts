@@ -20,13 +20,14 @@ function validateToken(req: Request) {
 
 export async function GET(
   req: Request,
-  { params }: { params: { id: string } }
+  context: { params: Promise<{ id: string }> }
 ) {
   const auth = validateToken(req);
   if (auth instanceof NextResponse) return auth;
 
+  const { id } = await context.params;
   const product = dataStore.products.find(
-    (product) => product.id === Number(params.id)
+    (product) => product.id === Number(id)
   );
   if (!product)
     return NextResponse.json({ error: "Not found" }, { status: 404 });
@@ -36,13 +37,13 @@ export async function GET(
 
 export async function PUT(
   req: Request,
-  { params }: { params: { id: string } }
+  context: { params: Promise<{ id: string }> }
 ) {
   const auth = validateToken(req);
   if (auth instanceof NextResponse) return auth;
-
+  const { id } = await context.params;
   const body = await req.json();
-  const index = dataStore.products.findIndex((p) => p.id === Number(params.id));
+  const index = dataStore.products.findIndex((p) => p.id === Number(id));
   if (index === -1)
     return NextResponse.json({ error: "Not found" }, { status: 404 });
 
@@ -52,12 +53,13 @@ export async function PUT(
 
 export async function DELETE(
   req: Request,
-  { params }: { params: { id: string } }
+  context: { params: Promise<{ id: string }> }
 ) {
   const auth = validateToken(req);
   if (auth instanceof NextResponse) return auth;
 
-  const index = dataStore.products.findIndex((p) => p.id === Number(params.id));
+  const { id } = await context.params;
+  const index = dataStore.products.findIndex((p) => p.id === Number(id));
   if (index === -1)
     return NextResponse.json({ error: "Not found" }, { status: 404 });
 

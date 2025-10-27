@@ -4,13 +4,8 @@ import { useEffect, useState, useMemo } from "react";
 import { useUserStore } from "@/lib/store/userStore";
 import ProductsTable from "@/components/VirtualizedTable/VirtualizedTable";
 import type { Product } from "@/lib/data/products";
-import ProductFilter from "@/components/ProductFilter/ProductFilter";
-import {
-  Container,
-  Typography,
-  CircularProgress,
-} from "@mui/material";
-
+import ProductFilter from "@/components/common/ProductFilter/ProductFilter";
+import { Container, Typography, CircularProgress } from "@mui/material";
 
 export default function ProductsData() {
   const token = useUserStore((state) => state.token);

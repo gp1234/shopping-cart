@@ -91,7 +91,16 @@ export default function AdminTable({ products, onEdit, onDelete }: Props) {
                   px: 2,
                 }}
               >
-                <Typography sx={{ width: 70 }}>{product.id}</Typography>
+                <Typography
+                  sx={{
+                    width: 70,
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                    whiteSpace: "nowrap",
+                  }}
+                >
+                  {product.id}
+                </Typography>
                 <Typography sx={{ flex: 1 }}>{product.name}</Typography>
                 <Typography sx={{ flex: 1 }}>{product.category}</Typography>
                 <Typography sx={{ flex: 1 }}>{product.price}</Typography>

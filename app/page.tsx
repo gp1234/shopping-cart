@@ -1,21 +1,28 @@
 "use client";
+
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useUserStore } from "@/lib/store/userStore";
 import { UserRoles } from "@/lib/data/users";
+import { roleRoutes } from "@/lib/auth/roleConfig";
 
 export default function HomeRedirect() {
   const router = useRouter();
-  const token = useUserStore((state) => state.token);
-  const role = useUserStore((state) => state.user?.role);
-  const hasHydrated = useUserStore((state) => state.hasHydrated);
+  const token = useUserStore((s) => s.token);
+  const role = useUserStore((s) => s.user?.role);
+  const hasHydrated = useUserStore((s) => s.hasHydrated);
 
   useEffect(() => {
     if (!hasHydrated) return;
-    if (token && role === UserRoles.USER) router.replace("/products");
-    else if (token && role === UserRoles.ADMIN) router.replace("/dashboard");
-    else router.replace("/login");
-  }, [token, role, hasHydrated, router]);
+
+    if (!token) {
+      router.replace("/login");
+      return;
+    }
+
+    const target = role ? roleRoutes[role as UserRoles] : "/login";
+    router.replace(target);
+  }, [hasHydrated, token, role, router]);
 
   return null;
 }

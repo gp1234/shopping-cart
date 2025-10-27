@@ -1,10 +1,11 @@
 "use client";
-
-import { useEffect, useState, useMemo } from "react";
+import AdminTable from "../components/AdminTable/AdminTable";
+import { useEffect, useState } from "react";
 import { useUserStore } from "@/lib/store/userStore";
 import type { Product } from "@/lib/data/products";
-import ProductFilter from "@/components/ProductFilter/ProductFilter";
-import AdminTable from "../components/AdminTable/AdminTable";
+import { BaseModal } from "@/components/common/Modal/Modal";
+import { ProductForm } from "../components/ProductForm/ProductForm";
+import ProductFilter from "@/components/common/ProductFilter/ProductFilter";
 import {
   Container,
   Typography,
@@ -20,10 +21,11 @@ export default function AdminDashboard() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [modalOpen, setModalOpen] = useState(false);
-  const [newProduct, setNewProduct] = useState<Product | null>(null);
+  const [editing, setEditing] = useState<Product | null>(null);
 
   const handleCloseModal = () => {
     setModalOpen(false);
+    setEditing(null);
   };
 
   async function fetchProducts() {
@@ -33,9 +35,7 @@ export default function AdminDashboard() {
       });
       const data = await res.json();
 
-      if (!res.ok) {
-        throw new Error(data.error || "Failed to load products");
-      }
+      if (!res.ok) throw new Error(data.error || "Failed to load products");
 
       setProducts(data.products);
       setFiltered(data.products);
@@ -45,10 +45,29 @@ export default function AdminDashboard() {
       setLoading(false);
     }
   }
+
   useEffect(() => {
     if (!token) return;
     fetchProducts();
   }, [token]);
+
+  const handleDelete = async (id: string) => {
+    if (!confirm("Are you sure you want to delete this product?")) return;
+    try {
+      await fetch(`/api/products/${id}`, {
+        method: "DELETE",
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      fetchProducts();
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const handleSuccess = () => {
+    fetchProducts();
+    handleCloseModal();
+  };
 
   if (loading)
     return (
@@ -65,18 +84,16 @@ export default function AdminDashboard() {
     );
 
   return (
-    <>
+    <Container sx={{ py: 4 }}>
       <Typography variant="h4" gutterBottom>
-        Products
+        Product Management
       </Typography>
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-        }}
-      >
-        <ProductFilter products={products} setFiltered={setFiltered} />
+
+      <Box sx={{ display: "flex", justifyContent: "space-between", mb: 2 }}>
+        <Typography variant="body1" color="text.secondary">
+          Total Products: {products.length}
+        </Typography>
+
         <Button
           variant="contained"
           color="primary"
@@ -85,7 +102,28 @@ export default function AdminDashboard() {
           Add Product
         </Button>
       </Box>
-      <AdminTable products={filtered} />
-    </>
+      <ProductFilter products={products} setFiltered={setFiltered} />
+      <AdminTable
+        products={filtered}
+        onEdit={setEditing}
+        onDelete={handleDelete}
+      />
+
+      <BaseModal
+        open={modalOpen || Boolean(editing)}
+        onClose={handleCloseModal}
+        title={editing ? "Edit Product" : "Add New Product"}
+        width={480}
+      >
+        <ProductForm
+          token={token!}
+          product={
+            editing ? { ...editing, id: editing.id?.toString() } : editing
+          }
+          onSuccess={handleSuccess}
+          onClose={handleCloseModal}
+        />
+      </BaseModal>
+    </Container>
   );
 }

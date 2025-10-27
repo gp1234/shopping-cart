@@ -13,16 +13,17 @@ import {
 import { z } from "zod";
 import { useUserStore } from "@/lib/store/userStore";
 import { generateURL } from "@/lib/utils/generateURL";
+import { BaseModal } from "@/components/common/Modal/Modal";
 
 const style = {
-  position: 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
   width: 400,
-  bgcolor: 'background.paper',
-  border: '2px solid #000',
- 
+  bgcolor: "background.paper",
+  border: "2px solid #000",
+
   p: 4,
 };
 
@@ -55,8 +56,6 @@ export default function Page() {
     setReferralLink(generateURL(user!.id, email));
     setModalOpen(true);
   };
-
-
 
   const handleCloseModal = () => {
     setModalOpen(false);
@@ -97,31 +96,16 @@ export default function Page() {
           </Box>
         </Paper>
       </Container>
-      <Modal
+      <BaseModal
         open={modalOpen}
         onClose={handleCloseModal}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
+        title="Referral Link"
       >
-        <Box sx={style}>
-          <Typography variant="h6" component="h2">
-            Referral Link:
-          </Typography>
-          <Typography id="modal-modal-description" sx={{ mt: 2,  }}>
-            {referralLink}
-          </Typography>
-          <Box>
-            <Button
-              sx={{ mt: 2 }}
-              variant="contained"
-              color="primary"
-              onClick={handleCloseModal}
-            >
-              Close
-            </Button>
-          </Box>
-        </Box>
-      </Modal>
+        <Typography sx={{ mb: 2 }}>{referralLink}</Typography>
+        <Button variant="contained" color="primary" onClick={handleCloseModal}>
+          Done
+        </Button>
+      </BaseModal>
     </>
   );
 }
