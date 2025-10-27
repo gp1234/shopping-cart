@@ -1,37 +1,41 @@
-// src/lib/store/productStore.ts
-import { create } from 'zustand'
-import { persist, createJSONStorage } from 'zustand/middleware'
-import type { Product } from '@/lib/data/products'
+import { create } from "zustand";
+import { persist, createJSONStorage } from "zustand/middleware";
+import type { Product } from "@/lib/data/products";
 
 type CartState = {
-  items: Product[]
-  addToCart: (product: Product) => void
-  removeFromCart: (id: number) => void
-  toggleCartItem: (product: Product) => void
-  clearCart: () => void
-  hasHydrated: boolean
-  setHasHydrated: (v: boolean) => void
-}
+  products: Product[];
+  addToCart: (product: Product) => void;
+  removeFromCart: (id: number) => void;
+  toggleCartItem: (product: Product) => void;
+  clearCart: () => void;
+  hasHydrated: boolean;
+  setHasHydrated: (v: boolean) => void;
+};
 
 export const useCartStore = create<CartState>()(
   persist(
     (set, get) => ({
-      items: [],
-      addToCart: p => {
-        if (!get().items.some(i => i.id === p.id)) set({ items: [...get().items, p] })
+      products: [],
+      addToCart: (product) => {
+        if (!get().products.some((item) => item.id === product.id))
+          set({ products: [...get().products, product] });
       },
-      removeFromCart: id => set({ items: get().items.filter(i => i.id !== id) }),
-      toggleCartItem: p => (get().items.some(i => i.id === p.id) ? get().removeFromCart(p.id) : get().addToCart(p)),
-      clearCart: () => set({ items: [] }),
+      removeFromCart: (id) =>
+        set({ products: get().products.filter((item) => item.id !== id) }),
+      toggleCartItem: (product) =>
+        get().products.some((item) => item.id === product.id)
+          ? get().removeFromCart(product.id)
+          : get().addToCart(product),
+      clearCart: () => set({ products: [] }),
       hasHydrated: false,
-      setHasHydrated: v => set({ hasHydrated: v }),
+      setHasHydrated: (v) => set({ hasHydrated: v }),
     }),
     {
-      name: 'cart-storage',
+      name: "cart-storage",
       storage: createJSONStorage(() => localStorage),
-      onRehydrateStorage: () => state => {
-        state?.setHasHydrated(true)
+      onRehydrateStorage: () => (state) => {
+        state?.setHasHydrated(true);
       },
     }
   )
-)
+);
