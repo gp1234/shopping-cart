@@ -12,10 +12,14 @@
 
 # testing
 /coverage
+test-results/
+playwright-report/
+blob-report/
 
 # next.js
 /.next/
 /out/
+.swc/
 
 # production
 /build

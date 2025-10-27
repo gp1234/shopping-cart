@@ -9,6 +9,7 @@ const customJestConfig = {
     '^@/(.*)$': '<rootDir>/$1',
   },
   coverageDirectory: 'coverage',
+  testPathIgnorePatterns: ['<rootDir>/tests/e2e/'],
 };
 
 module.exports = createJestConfig(customJestConfig);
