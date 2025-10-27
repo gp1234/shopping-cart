@@ -20,11 +20,11 @@ export default function ProductsData() {
   const removeFromCart = useCartStore((state) => state.removeFromCart);
 
   const columns = [
-    { key: "id", label: "ID", width: 70 },
+    { key: "id", label: "ID", width: 70, hideOnMobile: true },
     { key: "name", label: "Name", flex: 2 },
-    { key: "category", label: "Category", flex: 1 },
-    { key: "price", label: "Price (€)", width: 120 },
-    { key: "description", label: "Description", flex: 3 },
+    { key: "category", label: "Category", flex: 1, hideOnMobile: true },
+    { key: "price", label: "Price (€)", width: { xs: "auto", sm: 120 } },
+    { key: "description", label: "Description", flex: 3, hideOnMobile: true },
   ];
 
   useEffect(() => {

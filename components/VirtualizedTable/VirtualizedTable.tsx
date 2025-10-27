@@ -2,9 +2,15 @@
 "use client";
 import * as React from "react";
 import { useVirtualizer } from "@tanstack/react-virtual";
-import { Box, Typography, Paper } from "@mui/material";
+import { Box, Typography, Paper, useTheme, useMediaQuery } from "@mui/material";
 
-type Column = { key: string; label: string; width?: number; flex?: number };
+type Column = {
+  key: string;
+  label: string;
+  width?: number;
+  flex?: number;
+  hideOnMobile?: boolean;
+};
 type VirtualizedTableProps<T> = {
   data: T[];
   columns: Column[];
@@ -25,7 +31,12 @@ export default function VirtualizedTable<T>({
     estimateSize: () => 56,
     overscan: 8,
   });
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
 
+  const visibleColumns = React.useMemo(() => {
+    return columns.filter((column) => !(column.hideOnMobile && isMobile));
+  }, [columns, isMobile]);
   return (
     <Paper
       sx={{ height, width: "100%", display: "flex", flexDirection: "column" }}
@@ -39,7 +50,7 @@ export default function VirtualizedTable<T>({
           px: 2,
         }}
       >
-        {columns.map((col) => (
+        {visibleColumns.map((col) => (
           <Typography
             key={col.key}
             sx={{
@@ -52,7 +63,15 @@ export default function VirtualizedTable<T>({
           </Typography>
         ))}
         {renderActions && (
-          <Typography sx={{ width: 200, py: 1.5 }}>Actions</Typography>
+          <Typography
+            sx={{
+              width: { xs: 100, sm: 200 },
+              py: 1.5,
+              textAlign: { xs: "center", sm: "center" },
+            }}
+          >
+            Actions
+          </Typography>
         )}
       </Box>
 
@@ -85,7 +104,7 @@ export default function VirtualizedTable<T>({
                   px: 2,
                 }}
               >
-                {columns.map((col) => (
+                {visibleColumns.map((col) => (
                   <Typography
                     key={col.key}
                     sx={{
@@ -102,7 +121,7 @@ export default function VirtualizedTable<T>({
                 {renderActions && (
                   <Box
                     sx={{
-                      width: 200,
+                      width: { xs: 100, sm: 200 },
                       display: "flex",
                       justifyContent: "center",
                       gap: 1,

@@ -63,7 +63,7 @@ export default function ProductFilter({ products, setFiltered }: Props) {
 
   const maxPrice = useMemo(() => {
     const all = Array.from(new Set(products.map((product) => product.price)));
-    return Math.max(...all) + 100;
+    return Math.max(...all);
   }, [products]);
   useEffect(() => {
     setFiltered(filtered);
@@ -95,6 +95,7 @@ export default function ProductFilter({ products, setFiltered }: Props) {
         variant="outlined"
         size="small"
         value={query}
+        sx={{ width: { xs: "100%", sm: "auto" } }}
         onChange={(e) => setQuery(e.target.value)}
       />
 
@@ -104,8 +105,8 @@ export default function ProductFilter({ products, setFiltered }: Props) {
         variant="outlined"
         size="small"
         value={category}
+        sx={{ width: { xs: "100%", sm: "auto" }, minWidth: 150 }}
         onChange={(e) => setCategory(e.target.value)}
-        sx={{ minWidth: 150 }}
       >
         {categories.map((category) => (
           <MenuItem key={category} value={category}>
@@ -114,7 +115,7 @@ export default function ProductFilter({ products, setFiltered }: Props) {
         ))}
       </TextField>
 
-      <Box sx={{ width: 220 }}>
+      <Box sx={{ width: { xs: "100%", sm: "220px" } }}>
         <Typography variant="body2" sx={{ mb: 1 }}>
           Price Range (€)
         </Typography>

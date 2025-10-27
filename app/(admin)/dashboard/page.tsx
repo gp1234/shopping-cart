@@ -70,11 +70,11 @@ export default function AdminDashboard() {
   };
 
   const columns = [
-    { key: "id", label: "ID", width: 70 },
+    { key: "id", label: "ID", width: 70, hideOnMobile: true },
     { key: "name", label: "Name", flex: 1 },
-    { key: "category", label: "Category", flex: 1 },
-    { key: "price", label: "Price (€)", flex: 1 },
-    { key: "description", label: "Description", flex: 3 },
+    { key: "category", label: "Category", flex: 1, hideOnMobile: true },
+    { key: "price", label: "Price (€)", flex: 1, hideOnMobile: true },
+    { key: "description", label: "Description", flex: 3, hideOnMobile: true },
   ];
 
   if (loading)
@@ -92,12 +92,20 @@ export default function AdminDashboard() {
     );
 
   return (
-    <Container sx={{ py: 4 }}>
+    <Container sx={{ py: 4, px: 0 }}>
       <Typography variant="h4" gutterBottom>
         Product Management
       </Typography>
 
-      <Box sx={{ display: "flex", justifyContent: "space-between", mb: 2 }}>
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "space-between",
+          flexDirection: { xs: "column", sm: "row" },
+          gap: { xs: 1, sm: 0 },
+          mb: { xs: 1, md: 2 },
+        }}
+      >
         <Typography variant="body1" color="text.secondary">
           Total Products: {products.length}
         </Typography>

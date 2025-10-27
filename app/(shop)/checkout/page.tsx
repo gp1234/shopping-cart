@@ -43,7 +43,7 @@ export default function CheckoutPage() {
             <Box
               role="row"
               sx={{
-                display: { xs: "none", md: "grid" },
+                display: "grid",
                 gridTemplateColumns: "2fr 1fr 1fr",
                 gap: 2,
                 px: 1,
@@ -54,7 +54,12 @@ export default function CheckoutPage() {
             >
               <Typography variant="subtitle2">Product</Typography>
               <Typography variant="subtitle2">Price</Typography>
-              <Typography variant="subtitle2">Action</Typography>
+              <Typography
+                sx={{ textAlign: { sm: "right" } }}
+                variant="subtitle2"
+              >
+                Action
+              </Typography>
             </Box>
           </Box>
           <Box role="rowgroup">
@@ -71,7 +76,7 @@ export default function CheckoutPage() {
                   key={id}
                   role="row"
                   sx={{
-                    display: { xs: "block", md: "grid" },
+                    display: "grid",
                     gridTemplateColumns: "2fr 1fr 1fr",
                     gap: 2,
                     alignItems: "center",
@@ -87,7 +92,7 @@ export default function CheckoutPage() {
                   <Box role="cell">
                     <Typography>${price.toFixed(2)}</Typography>
                   </Box>
-                  <Box role="cell">
+                  <Box role="cell" sx={{ marginLeft: { sm: "auto" } }}>
                     <Button
                       variant="outlined"
                       color="secondary"
