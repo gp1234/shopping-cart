@@ -17,7 +17,7 @@ export const users: User[] = [
     email: "gio@example.com",
     password: "password123",
     role: UserRoles.USER,
-    tier: 3,
+    tier: 2,
   },
   {
     id: "2",

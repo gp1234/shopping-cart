@@ -24,9 +24,9 @@ export default function LogInPage() {
   const token = useUserStore((s) => s.token);
 
   useEffect(() => {
-    if (token) router.push("/"); 
+    if (token) router.push("/");
   }, [token, router]);
-  
+
   const {
     register,
     handleSubmit,
@@ -60,8 +60,8 @@ export default function LogInPage() {
       }
       return;
     }
-      useUserStore.getState().login(result.user, result.token)
-      router.push('/')
+    useUserStore.getState().login(result.user, result.token);
+    router.push("/");
   };
 
   return (
@@ -99,6 +99,11 @@ export default function LogInPage() {
             error={!!errors.password}
             helperText={errors.password?.message}
           />
+          {errors.root && (
+            <Typography color="error" variant="body2" sx={{ mt: 1 }}>
+              {errors.root.message}
+            </Typography>
+          )}
           <Box
             component="footer"
             mt={2}

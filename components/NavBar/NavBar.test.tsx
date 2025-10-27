@@ -20,14 +20,12 @@ const useMediaQueryMock = jest.fn<boolean, [unknown]>();
 
 const logoutMock = jest.fn();
 let storeState = {
-  user: null as
-    | null
-    | {
-        id: string;
-        email: string;
-        role: string;
-        tier: string;
-      },
+  user: null as null | {
+    id: string;
+    email: string;
+    role: string;
+    tier: string;
+  },
   logout: logoutMock,
 };
 
@@ -76,7 +74,7 @@ describe("NavBar", () => {
       id: "1",
       email: "user@example.com",
       role: UserRoles.USER,
-      tier: "gold",
+      tier: "1",
     };
     usePathnameMock.mockReturnValue("/");
     useMediaQueryMock.mockReturnValue(false);
@@ -95,7 +93,7 @@ describe("NavBar", () => {
       id: "1",
       email: "user@example.com",
       role: UserRoles.USER,
-      tier: "gold",
+      tier: "1",
     };
     usePathnameMock.mockReturnValue("/referral");
     useMediaQueryMock.mockReturnValue(false);
@@ -113,7 +111,7 @@ describe("NavBar", () => {
       id: "2",
       email: "admin@example.com",
       role: UserRoles.ADMIN,
-      tier: "gold",
+      tier: "1",
     };
     usePathnameMock.mockReturnValue("/");
     useMediaQueryMock.mockReturnValue(false);

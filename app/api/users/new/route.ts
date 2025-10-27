@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { users } from "@/data/users";
+import { UserRoles, users } from "@/data/users";
 import { randomUUID } from "crypto";
 import { signupSchema } from "@/lib/schemas/authSchema";
 import { User } from "@/data/users";
@@ -49,7 +49,7 @@ export async function POST(request: Request) {
       email,
       password,
       tier,
-      role: "user",
+      role: UserRoles.USER,
     };
 
     users.push(newUser);

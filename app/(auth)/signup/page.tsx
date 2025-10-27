@@ -21,8 +21,6 @@ import { useSearchParams } from "next/navigation";
 type SignUpFormData = z.infer<typeof signupSchema>;
 
 export default function SignUpPage() {
-
-
   const router = useRouter();
   const token = useUserStore((s) => s.token);
   const searchParams = useSearchParams();
@@ -35,6 +33,7 @@ export default function SignUpPage() {
     clearErrors,
     setError,
     setValue,
+    watch,
     formState: { errors },
   } = useForm({
     resolver: zodResolver(signupSchema),
@@ -42,16 +41,16 @@ export default function SignUpPage() {
 
   useEffect(() => {
     if (email) {
-      setValue("email", email);
+      setValue("email", decodeURIComponent(email), {
+        shouldDirty: false,
+        shouldTouch: true,
+      });
     }
   }, [email, setValue]);
 
- 
-
-    useEffect(() => {
-      if (token) router.push("/"); 
-    }, [token, router]);
-
+  useEffect(() => {
+    if (token) router.push("/");
+  }, [token, router]);
 
   const onSubmit = async (data: SignUpFormData) => {
     clearErrors();
@@ -79,6 +78,8 @@ export default function SignUpPage() {
     router.push("/");
   };
 
+  const emailValue = watch("email");
+
   return (
     <Card sx={{ boxShadow: 3, borderRadius: 2, padding: 2 }}>
       <CardHeader
@@ -103,6 +104,7 @@ export default function SignUpPage() {
             {...register("email")}
             error={!!errors.email}
             helperText={errors.email?.message}
+            InputLabelProps={{ shrink: Boolean(emailValue) }}
           />
           <TextField
             label="Password"
@@ -124,6 +126,11 @@ export default function SignUpPage() {
             error={!!errors.confirmPassword}
             helperText={errors.confirmPassword?.message}
           />
+          {errors.root && (
+            <Typography color="error" variant="body2" sx={{ mt: 1 }}>
+              {errors.root.message}
+            </Typography>
+          )}
 
           <Box
             component="footer"
