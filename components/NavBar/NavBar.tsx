@@ -2,7 +2,7 @@
 import { AppBar, Toolbar, Typography, Button, Box } from "@mui/material";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { UserRoles } from "@/lib/data/users";
+import { UserRoles } from "@/data/users";
 import { useUserStore } from "@/lib/store/userStore";
 import { useRouter } from "next/navigation";
 

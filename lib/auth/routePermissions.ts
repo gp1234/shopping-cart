@@ -1,4 +1,4 @@
-import { UserRoles } from "@/lib/data/users";
+import { UserRoles } from "@/data/users";
 
 export const routePermissions: Record<string, UserRoles[]> = {
   "/dashboard": [UserRoles.ADMIN],

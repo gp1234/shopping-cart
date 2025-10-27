@@ -1,17 +1,15 @@
-export type Role = "user" | "admin";
+export enum UserRoles {
+  USER = "user",
+  ADMIN = "admin",
+}
 
 export type User = {
   id: string;
   email: string;
   password: string;
-  role: Role;
+  role: UserRoles;
   tier?: number;
 };
-
-export enum UserRoles {
-  USER = "user",
-  ADMIN = "admin",
-}
 
 export const users: User[] = [
   {

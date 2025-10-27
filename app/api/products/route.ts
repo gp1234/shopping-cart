@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
-import { decodeMockJWT } from "@/lib/utils/generateMockJWT";
-import { dataStore } from "@/lib//utils/dataStore";
+import { decodeMockJWT } from "@/server-utils/generateMockJWT";
+import { dataStore } from "@/server-utils/dataStore";
 import { randomUUID } from "crypto";
 import { ProductSchema } from "@/lib/schemas/productSchema";
 import { z } from "zod";

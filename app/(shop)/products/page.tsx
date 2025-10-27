@@ -2,10 +2,11 @@
 
 import { useEffect, useState, useMemo } from "react";
 import { useUserStore } from "@/lib/store/userStore";
-import ProductsTable from "@/components/VirtualizedTable/VirtualizedTable";
-import type { Product } from "@/lib/data/products";
-import ProductFilter from "@/components/common/ProductFilter/ProductFilter";
-import { Container, Typography, CircularProgress } from "@mui/material";
+import VirtualizedTable from "@/components/VirtualizedTable/VirtualizedTable";
+import type { Product } from "@/data/products";
+import ProductFilter from "@/components/ProductFilter/ProductFilter";
+import { Container, Typography, CircularProgress, Button } from "@mui/material";
+import { useCartStore } from "@/lib/store/productStore";
 
 export default function ProductsData() {
   const token = useUserStore((state) => state.token);
@@ -13,6 +14,18 @@ export default function ProductsData() {
   const [filtered, setFiltered] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+
+  const items = useCartStore((state) => state.products);
+  const addToCart = useCartStore((state) => state.addToCart);
+  const removeFromCart = useCartStore((state) => state.removeFromCart);
+
+  const columns = [
+    { key: "id", label: "ID", width: 70 },
+    { key: "name", label: "Name", flex: 2 },
+    { key: "category", label: "Category", flex: 1 },
+    { key: "price", label: "Price (€)", width: 120 },
+    { key: "description", label: "Description", flex: 3 },
+  ];
 
   useEffect(() => {
     if (!token) return;
@@ -61,7 +74,25 @@ export default function ProductsData() {
       </Typography>
 
       <ProductFilter products={products} setFiltered={setFiltered} />
-      <ProductsTable products={filtered} />
+      <VirtualizedTable
+        data={filtered}
+        columns={columns}
+        renderActions={(product) => {
+          const inCart = items.some((item) => item.id === product.id);
+          return (
+            <Button
+              variant={inCart ? "outlined" : "contained"}
+              color={inCart ? "secondary" : "primary"}
+              size="small"
+              onClick={() =>
+                inCart ? removeFromCart(product.id) : addToCart(product)
+              }
+            >
+              {inCart ? "Remove" : "Buy"}
+            </Button>
+          );
+        }}
+      />
     </>
   );
 }

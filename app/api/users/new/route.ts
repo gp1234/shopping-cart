@@ -1,9 +1,9 @@
 import { NextResponse } from "next/server";
-import { users } from "@/lib/data/users";
+import { users } from "@/data/users";
 import { randomUUID } from "crypto";
 import { signupSchema } from "@/lib/schemas/authSchema";
-import { User } from "@/lib/data/users";
-import { generateMockJWT } from "@/lib/utils/generateMockJWT";
+import { User } from "@/data/users";
+import { generateMockJWT } from "@/server-utils/generateMockJWT";
 
 export async function POST(request: Request) {
   try {
@@ -36,7 +36,7 @@ export async function POST(request: Request) {
     }
 
     let tier = 1;
-    
+
     if (invitedBy) {
       const invited = users.find((user) => user.id === invitedBy);
       if (invited) {

@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
-import { decodeMockJWT } from "@/lib/utils/generateMockJWT";
-import { dataStore } from "@/lib//utils/dataStore";
+import { decodeMockJWT } from "@/server-utils/generateMockJWT";
+import { dataStore } from "@/server-utils/dataStore";
 
 function validateToken(req: Request) {
   const authHeader = req.headers.get("Authorization");
@@ -43,7 +43,9 @@ export async function PUT(
   if (auth instanceof NextResponse) return auth;
   const { id } = await context.params;
   const body = await req.json();
-  const index = dataStore.products.findIndex((p) => p.id === Number(id));
+  const index = dataStore.products.findIndex(
+    (product) => product.id === Number(id)
+  );
   if (index === -1)
     return NextResponse.json({ error: "Not found" }, { status: 404 });
 
@@ -59,7 +61,9 @@ export async function DELETE(
   if (auth instanceof NextResponse) return auth;
 
   const { id } = await context.params;
-  const index = dataStore.products.findIndex((p) => p.id === Number(id));
+  const index = dataStore.products.findIndex(
+    (product) => product.id === Number(id)
+  );
   if (index === -1)
     return NextResponse.json({ error: "Not found" }, { status: 404 });
 

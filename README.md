@@ -1,13 +1,19 @@
 # Shopping Cart!
 
 ## Installation process
-1. Run `npm i` 
+
+1. Run `npm i`
 2. Run `npm run dev`
 
-## Example User
-For an regular user with tier 1 you can use: 
-    ```email: "gio@example.com",
-    password: "password123"```
+## Example Users to login
 
-If you want to look at all the users created you can access the endpoint
+For an regular user with tier 3 you can use:
+`email: "gio@example.com",
+    password: "password123"`
+
+For an admin user with you can use:
+`email: "admin@example.com",
+    password: "password123"`
+
+If you want to look at all the users created you can access the endpoint with their fields enter :
 `http://localhost:3000/api/users`

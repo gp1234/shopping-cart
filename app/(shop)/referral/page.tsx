@@ -13,19 +13,7 @@ import {
 import { z } from "zod";
 import { useUserStore } from "@/lib/store/userStore";
 import { generateURL } from "@/lib/utils/generateURL";
-import { BaseModal } from "@/components/common/Modal/Modal";
-
-const style = {
-  position: "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  width: 400,
-  bgcolor: "background.paper",
-  border: "2px solid #000",
-
-  p: 4,
-};
+import { BaseModal } from "@/components/Modal/Modal";
 
 const ReferralSchema = z.object({
   email: z
@@ -102,9 +90,6 @@ export default function Page() {
         title="Referral Link"
       >
         <Typography sx={{ mb: 2 }}>{referralLink}</Typography>
-        <Button variant="contained" color="primary" onClick={handleCloseModal}>
-          Done
-        </Button>
       </BaseModal>
     </>
   );

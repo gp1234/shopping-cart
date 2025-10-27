@@ -1,11 +1,11 @@
 "use client";
-import AdminTable from "../components/AdminTable/AdminTable";
 import { useEffect, useState } from "react";
 import { useUserStore } from "@/lib/store/userStore";
-import type { Product } from "@/lib/data/products";
-import { BaseModal } from "@/components/common/Modal/Modal";
+import type { Product } from "@/data/products";
+import { BaseModal } from "@/components/Modal/Modal";
 import { ProductForm } from "../components/ProductForm/ProductForm";
-import ProductFilter from "@/components/common/ProductFilter/ProductFilter";
+import ProductFilter from "@/components/ProductFilter/ProductFilter";
+import VirtualizedBaseTable from "@/components/VirtualizedTable/VirtualizedTable";
 import {
   Container,
   Typography,
@@ -69,6 +69,14 @@ export default function AdminDashboard() {
     handleCloseModal();
   };
 
+  const columns = [
+    { key: "id", label: "ID", width: 70 },
+    { key: "name", label: "Name", flex: 1 },
+    { key: "category", label: "Category", flex: 1 },
+    { key: "price", label: "Price (€)", flex: 1 },
+    { key: "description", label: "Description", flex: 3 },
+  ];
+
   if (loading)
     return (
       <Container sx={{ mt: 10, textAlign: "center" }}>
@@ -102,11 +110,32 @@ export default function AdminDashboard() {
           Add Product
         </Button>
       </Box>
+
       <ProductFilter products={products} setFiltered={setFiltered} />
-      <AdminTable
-        products={filtered}
-        onEdit={setEditing}
-        onDelete={handleDelete}
+      <VirtualizedBaseTable
+        data={filtered}
+        columns={columns}
+        height={600}
+        renderActions={(product) => (
+          <>
+            <Button
+              variant="contained"
+              color="primary"
+              size="small"
+              onClick={() => setEditing(product)}
+            >
+              Edit
+            </Button>
+            <Button
+              variant="outlined"
+              color="error"
+              size="small"
+              onClick={() => handleDelete(product.id.toString())}
+            >
+              Delete
+            </Button>
+          </>
+        )}
       />
 
       <BaseModal

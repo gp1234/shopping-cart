@@ -16,11 +16,11 @@ const getDiscount = (tier: number) => {
 };
 
 export default function CheckoutPage() {
-  const items = useCartStore((state) => state.items);
+  const items = useCartStore((state) => state.products);
 
   const removeFromCart = useCartStore((state) => state.removeFromCart);
   const user = useUserStore((state) => state.user);
-  const discount = getDiscount(user?.tier);
+  const discount = getDiscount(user?.tier ? Number(user.tier) : 1) || 0;
   const subtotal = items.reduce((total, item) => {
     const price = Number((item as any).price ?? (item as any).unitPrice ?? 0);
     return total + price;
@@ -99,21 +99,23 @@ export default function CheckoutPage() {
                 </Box>
               );
             })}
-            <Box sx={{ mt: 2, display: "flex", flexDirection:"column", alignItems: "flex-end", justifyContent: "flex-end"}}>
-              <Box sx={{mb:2, textAlign: "right"}}>
-                <Typography fontWeight={"Bold"}>
-                  Discount
-                </Typography>
-                <Typography >
-                   €{(discount * subtotal).toFixed(2)}
-                </Typography>
+            <Box
+              sx={{
+                mt: 2,
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "flex-end",
+                justifyContent: "flex-end",
+              }}
+            >
+              <Box sx={{ mb: 2, textAlign: "right" }}>
+                <Typography fontWeight={"Bold"}>Discount</Typography>
+                <Typography>€{(discount * subtotal).toFixed(2)}</Typography>
               </Box>
-              <Box sx={{textAlign: "right"}}>
-                <Typography fontWeight={"Bold"}>
-                  Total
-                </Typography>
-                <Typography >
-                 €{(subtotal - (discount * subtotal)).toFixed(2)}
+              <Box sx={{ textAlign: "right" }}>
+                <Typography fontWeight={"Bold"}>Total</Typography>
+                <Typography>
+                  €{(subtotal - discount * subtotal).toFixed(2)}
                 </Typography>
               </Box>
             </Box>

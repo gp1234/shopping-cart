@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { useUserStore } from "@/lib/store/userStore";
-import { UserRoles } from "@/lib/data/users";
+import { UserRoles } from "@/data/users";
 import { roleRoutes } from "@/lib/auth/roleConfig";
 import { routePermissions } from "@/lib/auth/routePermissions";
 

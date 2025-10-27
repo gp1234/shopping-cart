@@ -1,12 +1,11 @@
 import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
-import type { Product } from "@/lib/data/products";
+import type { Product } from "@/data/products";
 
 type CartState = {
   products: Product[];
   addToCart: (product: Product) => void;
   removeFromCart: (id: number) => void;
-  toggleCartItem: (product: Product) => void;
   clearCart: () => void;
   hasHydrated: boolean;
   setHasHydrated: (v: boolean) => void;
@@ -22,10 +21,6 @@ export const useCartStore = create<CartState>()(
       },
       removeFromCart: (id) =>
         set({ products: get().products.filter((item) => item.id !== id) }),
-      toggleCartItem: (product) =>
-        get().products.some((item) => item.id === product.id)
-          ? get().removeFromCart(product.id)
-          : get().addToCart(product),
       clearCart: () => set({ products: [] }),
       hasHydrated: false,
       setHasHydrated: (v) => set({ hasHydrated: v }),

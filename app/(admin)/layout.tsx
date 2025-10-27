@@ -1,6 +1,6 @@
-import Navbar from "@/components/common/NavBar/NavBar";
+import Navbar from "@/components/NavBar/NavBar";
 import { Container } from "@mui/material";
-import ProtectedRoute from "@/components/common/ProtectedRoute/ProtectedRoute";
+import ProtectedRoute from "@/components/ProtectedRoute/ProtectedRoute";
 
 export default function ProductLayout({
   children,
