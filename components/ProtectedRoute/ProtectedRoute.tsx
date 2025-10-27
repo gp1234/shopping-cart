@@ -58,7 +58,6 @@ export default function ProtectedRoute({
   const allowedRoles = matched ? routePermissions[matched] : [];
   const currentRole = user?.role as UserRoles | undefined;
 
-  // Block render if unauthorized
   if (matched && !allowedRoles.includes(currentRole!)) return null;
 
   return <>{children}</>;

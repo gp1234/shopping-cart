@@ -73,8 +73,8 @@ export function BaseModal({
           sx={{
             flex: 1,
             overflowY: "auto",
-            minHeight: 0, // Important for flexbox scrolling
-            pr: 1, // Small padding for scrollbar
+            minHeight: 0,
+            pr: 1,
           }}
         >
           {children}
