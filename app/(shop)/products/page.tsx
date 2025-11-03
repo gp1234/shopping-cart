@@ -1,19 +1,16 @@
 "use client";
 
-import { useEffect, useState, useMemo } from "react";
-import { useUserStore } from "@/lib/store/userStore";
+import { useEffect, useState } from "react";
 import VirtualizedTable from "@/components/VirtualizedTable/VirtualizedTable";
 import type { Product } from "@/data/products";
 import ProductFilter from "@/components/ProductFilter/ProductFilter";
 import { Container, Typography, CircularProgress, Button } from "@mui/material";
 import { useCartStore } from "@/lib/store/productStore";
+import { useProducts } from "@/lib/hooks/useProducts";
 
 export default function ProductsData() {
-  const token = useUserStore((state) => state.token);
-  const [products, setProducts] = useState<Product[]>([]);
+  const { products, loading, error } = useProducts();
   const [filtered, setFiltered] = useState<Product[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
 
   const items = useCartStore((state) => state.products);
   const addToCart = useCartStore((state) => state.addToCart);
@@ -28,30 +25,8 @@ export default function ProductsData() {
   ];
 
   useEffect(() => {
-    if (!token) return;
-
-    async function fetchProducts() {
-      try {
-        const res = await fetch("/api/products", {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        const data = await res.json();
-
-        if (!res.ok) {
-          throw new Error(data.error || "Failed to load products");
-        }
-
-        setProducts(data.products);
-        setFiltered(data.products);
-      } catch (error: any) {
-        setError(error.message);
-      } finally {
-        setLoading(false);
-      }
-    }
-
-    fetchProducts();
-  }, [token]);
+    setFiltered(products);
+  }, [products]);
 
   if (loading)
     return (

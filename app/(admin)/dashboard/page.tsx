@@ -13,13 +13,12 @@ import {
   Box,
   Button,
 } from "@mui/material";
+import { useProducts } from "@/lib/hooks/useProducts";
 
 export default function AdminDashboard() {
   const token = useUserStore((state) => state.token);
-  const [products, setProducts] = useState<Product[]>([]);
+  const { products, loading, error, refetch } = useProducts();
   const [filtered, setFiltered] = useState<Product[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
   const [modalOpen, setModalOpen] = useState(false);
   const [editing, setEditing] = useState<Product | null>(null);
 
@@ -28,28 +27,9 @@ export default function AdminDashboard() {
     setEditing(null);
   };
 
-  async function fetchProducts() {
-    try {
-      const res = await fetch("/api/products", {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      const data = await res.json();
-
-      if (!res.ok) throw new Error(data.error || "Failed to load products");
-
-      setProducts(data.products);
-      setFiltered(data.products);
-    } catch (error: any) {
-      setError(error.message);
-    } finally {
-      setLoading(false);
-    }
-  }
-
   useEffect(() => {
-    if (!token) return;
-    fetchProducts();
-  }, [token]);
+    setFiltered(products);
+  }, [products]);
 
   const handleDelete = async (id: string) => {
     if (!confirm("Are you sure you want to delete this product?")) return;
@@ -58,14 +38,18 @@ export default function AdminDashboard() {
         method: "DELETE",
         headers: { Authorization: `Bearer ${token}` },
       });
-      fetchProducts();
+      refetch().catch((err) => {
+        console.error(err);
+      });
     } catch (err) {
       console.error(err);
     }
   };
 
   const handleSuccess = () => {
-    fetchProducts();
+    refetch().catch((err) => {
+      console.error(err);
+    });
     handleCloseModal();
   };
 
